@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">FlightBox</string>
+    <string name="main_subtitle">Local video player, no network</string>
+    <string name="empty_state_title">No folder selected</string>
+    <string name="empty_state_body">Pick a folder on your phone that contains video files. FlightBox will play them in landscape mode; swipe the bottom strip to switch videos.</string>
+    <string name="filled_state_label">Current folder</string>
+    <string name="folder_name_fallback">(unnamed folder)</string>
+    <string name="permission_warning">Read access was revoked. Please pick the folder again.</string>
+    <string name="pick_folder">Choose Video Folder</string>
+    <string name="change_folder">Change Folder</string>
+    <string name="clear_selection">Clear Selection</string>
+    <string name="rescan">Rescan</string>
+    <string name="cd_rescan">Rescan the folder for videos</string>
+    <string name="play">Play</string>
+    <string name="toast_folder_picked">Folder saved</string>
+    <string name="error_persist_permission">Could not save folder access</string>
+    <string name="scan_scanning">Scanning folder...</string>
+    <string name="scan_empty">No videos found in this folder</string>
+    <string name="player_no_videos">No videos to play</string>
+    <string name="player_loading">Loading…</string>
+    <string name="cd_thumbnail">Video thumbnail</string>
+    <string name="cd_back">Back</string>
+    <string name="strip_hint_swipe">Swipe to choose</string>
+
+    <plurals name="scan_count">
+        <item quantity="one">%d video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
+</resources>

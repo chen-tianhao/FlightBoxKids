@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  FlightBox app icon foreground.
+  A white paper plane flying toward the upper-right. The bottom wing
+  is rendered as a soft sky-blue highlight on TOP of the silhouette,
+  suggesting a fold catching the light.
+  Drawn inside the 66dp safe zone of the 108dp adaptive-icon viewport.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Main paper-plane silhouette (white) - drawn first -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M88,26 L20,52 L50,66 L76,84 Z" />
+
+    <!-- Bottom-wing highlight (light blue) - drawn on top -->
+    <path
+        android:fillColor="#BFDBFE"
+        android:pathData="M50,66 L76,84 L88,26 Z" />
+
+    <!-- Subtle motion-trail dots to convey "flight" -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.65"
+        android:pathData="M18,34 m -2.4,0 a 2.4,2.4 0 1,0 4.8,0 a 2.4,2.4 0 1,0 -4.8,0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.40"
+        android:pathData="M26,28 m -1.8,0 a 1.8,1.8 0 1,0 3.6,0 a 1.8,1.8 0 1,0 -3.6,0" />
+</vector>

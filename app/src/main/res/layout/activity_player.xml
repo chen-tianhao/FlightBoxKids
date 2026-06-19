@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    FlightBox player — LANDSCAPE ONLY.
+
+    The activity is locked to landscape by AndroidManifest.xml. The
+    screen is split vertically (LinearLayout with weights):
+      - Top 2/3: the currently selected video, full-width.
+      - Bottom 1/3: a horizontal ViewPager2 of video thumbnails used
+        to pick the next video.
+
+    Tapping the top area toggles the bottom strip. Five seconds of
+    no touch activity auto-hides the strip, so the top area gets the
+    full screen.
+
+    The bottom strip is the only place that owns the "back" affordance
+    (a back-arrow button in the top-left of the strip), so a child
+    who is in "full screen" mode can still leave the player.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
+
+    <!-- ============================================================
+         TOP 2/3 — current video
+         ============================================================ -->
+    <FrameLayout
+        android:id="@+id/topArea"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <androidx.media3.ui.PlayerView
+            android:id="@+id/playerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:resize_mode="fit"
+            app:show_buffering="when_playing"
+            app:show_fastforward_button="false"
+            app:show_next_button="false"
+            app:show_previous_button="false"
+            app:show_rewind_button="false"
+            app:show_subtitle_button="false"
+            app:use_controller="false" />
+
+        <!-- Video title overlay (top) — only relevant while strip is visible. -->
+        <TextView
+            android:id="@+id/titleOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="#80000000"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            tools:text="My Favorite Video Episode 5" />
+    </FrameLayout>
+
+    <!-- ============================================================
+         BOTTOM 1/3 — thumbnail strip
+         visibility toggled by tapping the top area; auto-hides
+         after 5 seconds of no touch.
+         ============================================================ -->
+    <FrameLayout
+        android:id="@+id/stripContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#111827">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/thumbPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+
+        <!-- Back button in the top-left of the strip. Always present so
+             a child who is in "full screen" can still leave the player
+             via the system back, or the back button on the strip (when
+             it next becomes visible). -->
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|start"
+            android:layout_margin="12dp"
+            android:background="#80000000"
+            android:contentDescription="@string/cd_back"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <!-- Hint label, top-right, briefly tells the child what to do. -->
+        <TextView
+            android:id="@+id/stripHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="14dp"
+            android:background="#80000000"
+            android:fontFamily="sans-serif"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="6dp"
+            android:text="@string/strip_hint_swipe"
+            android:textColor="#E5E7EB"
+            android:textSize="12sp" />
+    </FrameLayout>
+
+</LinearLayout>

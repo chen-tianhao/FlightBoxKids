@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    One thumbnail card in the landscape bottom strip.
+
+    IMPORTANT: ViewPager2 requires every page to be match_parent for
+    both width and height; fixed-size pages trigger
+    `IllegalStateException: Pages must fill the whole ViewPager2`. We
+    accept the consequence that there is no "peek" of the next page;
+    swiping reveals it with a full-width transition.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="6dp">
+
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#334155"
+        android:contentDescription="@string/cd_thumbnail"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:id="@+id/selectedOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/thumb_selected_overlay"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="8dp"
+        android:background="#A0000000"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="2dp"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp"
+        tools:text="2:15" />
+
+</FrameLayout>
