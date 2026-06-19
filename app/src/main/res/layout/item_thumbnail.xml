@@ -2,45 +2,61 @@
 <!--
     One thumbnail card in the landscape bottom strip.
 
-    IMPORTANT: ViewPager2 requires every page to be match_parent for
-    both width and height; fixed-size pages trigger
-    `IllegalStateException: Pages must fill the whole ViewPager2`. We
-    accept the consequence that there is no "peek" of the next page;
-    swiping reveals it with a full-width transition.
+    Aspect ratio is locked to 4:3 via ConstraintLayout's
+    dimensionRatio on the ImageView. The item root uses
+    wrap_content width, so a single card sizes itself to the 4:3
+    frame; several cards fit across the strip width on a typical
+    phone (the strip is the bottom 1/3 of the screen).
+
+    All three child views (thumbnail, selectedOverlay, duration) are
+    constrained to the same 4:3 rectangle, so the highlight ring
+    and the duration badge stay locked to the thumbnail.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:padding="6dp">
+    android:padding="4dp">
 
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="#334155"
         android:contentDescription="@string/cd_thumbnail"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="W,4:3" />
 
     <View
         android:id="@+id/selectedOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/thumb_selected_overlay"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/thumbnail"
+        app:layout_constraintBottom_toBottomOf="@id/thumbnail"
+        app:layout_constraintStart_toStartOf="@id/thumbnail"
+        app:layout_constraintEnd_toEndOf="@id/thumbnail" />
 
     <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="8dp"
         android:background="#A0000000"
         android:fontFamily="sans-serif-medium"
         android:paddingHorizontal="6dp"
         android:paddingVertical="2dp"
         android:textColor="#FFFFFF"
         android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/thumbnail"
+        app:layout_constraintEnd_toEndOf="@id/thumbnail"
+        android:layout_margin="8dp"
         tools:text="2:15" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.viewpager2.widget.ViewPager2
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.flightbox.FlightBoxApp
 import com.flightbox.R
 import com.flightbox.data.VideoItem
@@ -28,7 +28,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
- * Player — LANDSCAPE ONLY.
+ * Player - LANDSCAPE ONLY.
  *
  * The activity is locked to landscape by AndroidManifest. The screen
  * is split into a top 2/3 player area and a bottom 1/3 thumbnail
@@ -39,9 +39,11 @@ import kotlinx.coroutines.launch
  *  - Auto-hides 5 seconds after the last touch anywhere on the
  *    screen.
  *
- * Picking a thumbnail in the strip switches the current video. The
- * back button (top-left of the strip) is the only way to leave the
- * player; the system back key does the same.
+ * The bottom strip is a horizontal carousel of 4:3 thumbnails.
+ * Swiping the strip scrolls the carousel freely; tapping a
+ * thumbnail is what actually switches videos. The back button
+ * (top-left of the strip) is the only way to leave the player; the
+ * system back key does the same.
  */
 class PlayerActivity : AppCompatActivity() {
 
@@ -64,13 +66,13 @@ class PlayerActivity : AppCompatActivity() {
         // launch behaviours.
         // (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE is set in manifest)
 
-        // Immersive — hide the system bars.
+        // Immersive - hide the system bars.
         enterImmersiveMode()
 
-        // Top 2/3 tap → toggle strip.
+        // Top 2/3 tap - toggle strip.
         binding.topArea.setOnClickListener { toggleStrip() }
 
-        // Back button (top-left of the strip) → leave the player.
+        // Back button (top-left of the strip) - leave the player.
         binding.backButton.setOnClickListener { finish() }
 
         // System back also leaves (it does not toggle the strip; the
@@ -94,6 +96,14 @@ class PlayerActivity : AppCompatActivity() {
                     updateTitle(index)
                     (binding.thumbPager.adapter as? ThumbnailStripAdapter)
                         ?.setSelectedIndex(index)
+                    // When the model moves (via a tap on a thumbnail,
+                    // or a future auto-advance), scroll the strip so
+                    // the new selection is visible. Swiping the strip
+                    // itself is purely a scroll gesture; only tapping
+                    // a thumbnail actually switches videos.
+                    if (stripVisible) {
+                        binding.thumbPager.smoothScrollToPosition(index)
+                    }
                 }
             }
         }
@@ -140,14 +150,17 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     /**
-     * Wire up the bottom strip (ViewPager2 + adapter + tap routing).
+     * Wire up the bottom strip (RecyclerView + adapter + tap routing).
      * Called once, after the video list is in the ViewModel.
      */
     private fun setupStrip() {
         val videos = viewModel.videos.value
         binding.playerView.player = viewModel.player
+        binding.thumbPager.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.HORIZONTAL, false
+        )
         binding.thumbPager.adapter = ThumbnailStripAdapter(this, videos) { position ->
-            // Tap a thumbnail → switch to that video.
+            // Tap a thumbnail - switch to that video.
             if (position != viewModel.currentIndex.value) {
                 viewModel.selectIndex(position)
             } else {
@@ -156,7 +169,8 @@ class PlayerActivity : AppCompatActivity() {
                 showStrip()
             }
         }
-        binding.thumbPager.setCurrentItem(viewModel.currentIndex.value, false)
+        // Bring the initial selection into view without animation.
+        binding.thumbPager.scrollToPosition(viewModel.currentIndex.value)
         viewModel.loadCurrent()
         updateTitle(viewModel.currentIndex.value)
         // Make sure the strip starts visible.
